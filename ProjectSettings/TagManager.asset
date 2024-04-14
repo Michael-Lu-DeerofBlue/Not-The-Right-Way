@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - NPC
+  - Wall
+  - Checkpoint
+  - BarberedWire
+  - Police
   layers:
   - Default
   - TransparentFX

@@ -1,74 +1,117 @@
+using System.Runtime.CompilerServices;
+using UnityEditor;
 using UnityEngine;
 
 public class TrapPlacer : MonoBehaviour
 {
-    public GameObject trapPrefab; // Assign this in the Inspector with your trap prefab
+    public GameObject trapPrefab; // Assign the actual trap prefab
+    public GameObject BWPrefab; // Assign the actual trap prefab
+    public GameObject WallPrefab; // Assign the actual trap prefab
+    public GameObject SSPrefab; // Assign the actual trap prefab
     public GameObject placementIndicatorPrefab; // Assign the dotted circle prefab
-    private GameObject currentIndicator; // To keep track of the instantiated indicator
-
-    public string requiredSequence;
-    private int currentIndex = 0;
-    private bool isWaitingForInput = false;
-    private bool isConfirmationRequired = false;
-    private Vector2 placementPosition;
-
+    private GameObject currentIndicator;
+    public Transform parentObject;
+    public bool isSelected = false;
+    private int code;
     void Update()
     {
-        // Check for left mouse click to create or update the placement indicator
-        if (Input.GetMouseButtonDown(0))
+        if (!isSelected && gameObject.GetComponent<Hammer>().isSelected == false)
+        {
+            if (Input.GetKeyDown(KeyCode.A)) //trap
+            {
+                StartPlacement(trapPrefab, 1);
+            }
+            else if (Input.GetKeyDown(KeyCode.S)) //wall
+            {
+                StartPlacement(WallPrefab, 2);
+            }
+            else if (Input.GetKeyDown(KeyCode.D)) //bw
+            {
+                StartPlacement(BWPrefab, 3);
+            }
+            else if (Input.GetKeyDown(KeyCode.W)) //ss
+            {
+                StartPlacement(SSPrefab, 4);
+            }
+        }
+        if (Input.GetMouseButtonDown(1)) // Right mouse button
+        {
+            CancelPlacement();
+        }
+
+        if (isSelected)
         {
             if (currentIndicator != null)
             {
-                Destroy(currentIndicator); // Ensure only one indicator exists at a time
+                currentIndicator.transform.position = GetMouseWorldPosition();
             }
-            placementPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            currentIndicator = Instantiate(placementIndicatorPrefab, placementPosition, Quaternion.identity);
-            isWaitingForInput = true;
-            currentIndex = 0;
-            isConfirmationRequired = false;
-        }
-
-        // Check for right mouse click to cancel placement
-        if (Input.GetMouseButtonDown(1) && currentIndicator != null)
-        {
-            Destroy(currentIndicator);
-            isWaitingForInput = false;
-            isConfirmationRequired = false;
-        }
-
-        // Handle sequence input and check for confirmation
-        if (isWaitingForInput && !isConfirmationRequired)
-        {
-            CheckSequenceInput();
-        }
-
-        if (isConfirmationRequired && Input.GetKeyDown(KeyCode.Space))
-        {
-            PlaceTrap();
-            Destroy(currentIndicator); // Remove the indicator upon placing the trap
-            isWaitingForInput = false;
-            isConfirmationRequired = false;
-        }
-    }
-
-    void CheckSequenceInput()
-    {
-        if (Input.GetKeyDown(requiredSequence[currentIndex].ToString()))
-        {
-            currentIndex++;
-            if (currentIndex >= requiredSequence.Length)
+            if (Input.GetMouseButtonDown(0))
             {
-                isConfirmationRequired = true; // Require confirmation to place the trap
+                FinalizePlacement();
             }
-        }
-        else if (Input.anyKeyDown)
-        {
-            currentIndex = 0; // Reset sequence on any incorrect key press
         }
     }
 
-    void PlaceTrap()
+    private void StartPlacement(GameObject obj, int codee)
     {
-        Instantiate(trapPrefab, placementPosition, Quaternion.identity);
+        currentIndicator = Instantiate(obj, GetMouseWorldPosition(), Quaternion.identity);
+        switch (codee)
+        {
+            case 1:
+                currentIndicator.GetComponent<BoxCollider2D>().enabled = false;
+                break;
+            case 2:
+                currentIndicator.GetComponent<BoxCollider2D>().enabled = false;
+                break;
+            case 3:
+                currentIndicator.GetComponent<BoxCollider2D>().enabled = false;
+                break;
+            case 4:
+                currentIndicator.GetComponent<BoxCollider2D>().enabled = false;
+                break;
+        }
+        code = codee;
+        currentIndicator.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f); // Make the trap semi-transparent
+        isSelected = true;
+    }
+
+    private void FinalizePlacement()
+    {
+        GameObject instance = null;
+        Destroy(currentIndicator);
+        switch (code)
+        {
+            case 1:
+                instance = Instantiate(trapPrefab, GetMouseWorldPosition(), Quaternion.identity);
+                break;
+            case 2:
+                instance = Instantiate(WallPrefab, GetMouseWorldPosition(), Quaternion.identity);
+                break;
+            case 3:
+                instance = Instantiate(BWPrefab, GetMouseWorldPosition(), Quaternion.identity);
+                break;
+            case 4:
+                instance = Instantiate(SSPrefab, GetMouseWorldPosition(), Quaternion.identity);
+                break;
+        }
+        instance.transform.SetParent(parentObject);
+        instance.GetComponent<SpriteRenderer>().color = Color.white; // Remove transparency
+        isSelected = false;
+        code = 0;
+    }
+
+    private void CancelPlacement()
+    {
+        if (currentIndicator != null)
+            Destroy(currentIndicator);
+        isSelected = false;
+        code = 0;
+    }
+
+    private Vector3 GetMouseWorldPosition()
+    {
+        Vector3 mousePoint = Input.mousePosition;
+        mousePoint.z = Camera.main.nearClipPlane;
+        return Camera.main.ScreenToWorldPoint(mousePoint);
     }
 }

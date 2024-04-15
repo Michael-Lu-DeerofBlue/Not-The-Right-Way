@@ -11,6 +11,7 @@ public class ConstantsList : MonoBehaviour
     public float loseX;
     public float boardcastDelay;
     public GameObject NPCs;
+    public GameObject Normal;
 
     public void Boardcast()
     {
@@ -21,6 +22,8 @@ public class ConstantsList : MonoBehaviour
 
     IEnumerator BM(float delay)
     {
+        float ori_volume = Normal.GetComponent<AudioSource>().volume;
+        Normal.GetComponent<AudioSource>().volume = 0;
         NPCs.BroadcastMessage("Stop");
         float ori_s = mapSpeed;
         mapSpeed = 0;
@@ -28,5 +31,6 @@ public class ConstantsList : MonoBehaviour
         NPCs.BroadcastMessage("Recover");
         NPCs.BroadcastMessage("Accelerate");
         mapSpeed = ori_s;
+        Normal.GetComponent<AudioSource>().volume = ori_volume;
     }
 }

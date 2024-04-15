@@ -21,11 +21,11 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: fa126d74f5233cd4cb93e2c42adfd6bb, type: 3}
+      value: {fileID: 21300000, guid: cc60b5f7e573702459eb9aa8981be351, type: 3}
     - time: 0.33333334
-      value: {fileID: 21300000, guid: 973552a04b6fdec40bd36814e26b55dd, type: 3}
+      value: {fileID: 21300000, guid: 3bf16a75484ce624cb1ad54bef904237, type: 3}
     - time: 0.6666667
-      value: {fileID: 21300000, guid: 973552a04b6fdec40bd36814e26b55dd, type: 3}
+      value: {fileID: 21300000, guid: cc60b5f7e573702459eb9aa8981be351, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -48,9 +48,9 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: fa126d74f5233cd4cb93e2c42adfd6bb, type: 3}
-    - {fileID: 21300000, guid: 973552a04b6fdec40bd36814e26b55dd, type: 3}
-    - {fileID: 21300000, guid: 973552a04b6fdec40bd36814e26b55dd, type: 3}
+    - {fileID: 21300000, guid: cc60b5f7e573702459eb9aa8981be351, type: 3}
+    - {fileID: 21300000, guid: 3bf16a75484ce624cb1ad54bef904237, type: 3}
+    - {fileID: 21300000, guid: cc60b5f7e573702459eb9aa8981be351, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -77,6 +77,13 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
+    functionName: PlayFootstepSound
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
     functionName: PlayFootstepSound
     data: 
     objectReferenceParameter: {fileID: 0}

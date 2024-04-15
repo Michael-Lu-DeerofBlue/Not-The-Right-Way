@@ -9,6 +9,7 @@ TagManager:
   - Checkpoint
   - BarberedWire
   - Police
+  - TopSideWall
   layers:
   - Default
   - TransparentFX

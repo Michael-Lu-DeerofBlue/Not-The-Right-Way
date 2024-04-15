@@ -34,28 +34,28 @@ public class TrapPlacer : MonoBehaviour
     {
         if (!isSelected && gameObject.GetComponent<Hammer>().isSelected == false)
         {
-            if (Input.GetKeyDown(KeyCode.A)) //trap
+            if (Input.GetKeyDown(KeyCode.Alpha1)) //trap
             {
                 if (trapYes[0])
                 {
                     StartPlacement(trapStillPrefab, 1);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.S)) //wall
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) //wall
             {
                 if (trapYes[1])
                 {
                     StartPlacement(WallPrefab, 2);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.D)) //bw
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) //bw
             {
                 if (trapYes[2])
                 {
                     StartPlacement(BWStillPrefab, 3);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.W)) //ss
+            else if (Input.GetKeyDown(KeyCode.Alpha4)) //ss
             {
                 if (trapYes[3])
                 {

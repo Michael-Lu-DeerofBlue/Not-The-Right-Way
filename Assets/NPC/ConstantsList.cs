@@ -12,7 +12,9 @@ public class ConstantsList : MonoBehaviour
     public float boardcastDelay;
     public GameObject NPCs;
     public GameObject Normal;
-
+    public float checkpointDelay;
+    public float policyDelay;
+    public float hulkDelay;
     public void Boardcast()
     {
         Debug.Log("asd");

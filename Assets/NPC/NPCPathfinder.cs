@@ -20,6 +20,7 @@ public class NPCPathfinder : MonoBehaviour
     public GameObject Lose;
     public bool isHulk;
     public bool isKid;
+    public bool metBrokenWall;
     public bool isVIP;
     public float accConstant;
     public float separationDuration;
@@ -28,22 +29,36 @@ public class NPCPathfinder : MonoBehaviour
     public float[] gapThreshold;
     private Animator animator;
     private GameObject destoryObj;
+    public bool inStop;
+    private float checkpointDelay;
+    private float policyDelay;
+    private float hulkDelay;
     void Start()
     {
+        constantsList = constantsGameObject.GetComponent<ConstantsList>();
         animator = GetComponent<Animator>();
         ori_speed = speed;
-        constantsList = constantsGameObject.GetComponent<ConstantsList>();
+        checkpointDelay = constantsList.checkpointDelay;
+        policyDelay = constantsList.policyDelay;
+        hulkDelay = constantsList.hulkDelay;
     }
 
     void Update()
     {
-        if (isWall)
+        if (metBrokenWall)
         {
-            checkWithWall();
+            BrokenWallSituation();
         }
-        if (isBW)
+        else
         {
-            checkWithBW();
+            if (isWall)
+            {
+                checkWithWall();
+            }
+            if (isBW)
+            {
+                checkWithBW();
+            }
         }
         Vector3 eulerRotation = transform.rotation.eulerAngles;
         //Debug.Log(gameObject.name + movementDirection);
@@ -61,6 +76,29 @@ public class NPCPathfinder : MonoBehaviour
         }
         MoveNPC();
         //CheckWin();
+    }
+
+    void BrokenWallSituation()
+    {
+        if (gameObject.transform.position.y.ToString("F1") == theWall.transform.position.y.ToString("F1"))
+        {
+            float upperBound = theWall.transform.position.x + (theWall.bounds.size.x + gameObject.GetComponent<BoxCollider2D>().size.x * gameObject.transform.localScale.x) / 2 - 0.05f;
+            if (gameObject.transform.position.x > upperBound)
+            {
+                gameObject.GetComponent<BoxCollider2D>().enabled = true;
+                metBrokenWall = false;
+                isWall = false;
+            }
+            else
+            {
+                gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                movementDirection = Vector2.right;
+            }
+        }
+        else
+        {
+            movementDirection = (transform.position.y < theWall.transform.position.y) ? Vector2.up : Vector2.down;
+        }
     }
 
     private void MoveNPC()
@@ -109,7 +147,9 @@ public class NPCPathfinder : MonoBehaviour
         {
             speed = ori_speed;
             isBW = false;
+            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         }
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision){
@@ -118,10 +158,14 @@ public class NPCPathfinder : MonoBehaviour
         {
             case "Wall":
                 theWall = collision.collider;
+                if (isKid && collision.gameObject.GetComponent<Block>().isBroken)
+                {
+                    metBrokenWall = true;
+                }
                 if (isHulk)
                 {
                     Destroy(collision.gameObject);
-                    StartCoroutine(HulkStopMovement(1));
+                    StartCoroutine(HulkStopMovement(hulkDelay));
                 }
                 else
                 {
@@ -135,12 +179,12 @@ public class NPCPathfinder : MonoBehaviour
                 gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
                 break;
             case "Checkpoint":
-                StartCoroutine(CheckPointStopMovement(1));
+                StartCoroutine(CheckPointStopMovement(checkpointDelay));
                 destoryObj = collision.gameObject;
                 break;
             case "Police":
                 Debug.Log("AA");
-                StartCoroutine(PoliceStopMovement(0.5f));
+                StartCoroutine(PoliceStopMovement(policyDelay));
                 constantsList.Boardcast();
                 destoryObj = collision.gameObject;
                 collision.collider.gameObject.GetComponent<AnimationControl>().ResumeAnimation();
@@ -171,7 +215,7 @@ public class NPCPathfinder : MonoBehaviour
     {
         if (direction == Vector2.up)
         {
-            float upThreshold = 3.536f;
+            float upThreshold = 3.817f;
             float topPoint = hit.transform.position.y + hit.GetComponent<BoxCollider2D>().size.y * hit.transform.localScale.y/2;
             float NPCsize = GetComponent<BoxCollider2D>().size.y * gameObject.transform.localScale.x;
             if (upThreshold - topPoint < NPCsize)
@@ -183,14 +227,9 @@ public class NPCPathfinder : MonoBehaviour
         else
         {
             
-            float downThreshold = -3.152f;
+            float downThreshold = -3.37f;
             float downPoint = hit.transform.position.y - hit.GetComponent<BoxCollider2D>().size.y * hit.transform.localScale.y/2;
             float NPCsize = GetComponent<BoxCollider2D>().size.y * gameObject.transform.localScale.y;
-            Debug.Log(hit.transform.position.y.ToString());
-            Debug.Log(hit.GetComponent<BoxCollider2D>().size.y.ToString());
-            Debug.Log(hit.transform.localScale.y.ToString());
-            Debug.Log(downPoint.ToString());
-            Debug.Log((downPoint - downThreshold).ToString());
             if (downPoint - downThreshold < NPCsize)
             {
                 return true;
@@ -209,19 +248,22 @@ public class NPCPathfinder : MonoBehaviour
 
     IEnumerator HulkStopMovement(float delay)
     {
-        gameObject.tag = "Wall";
+        inStop = true;
         animator.speed = 0;
         float originalSpeed = speed;
         speed = 0;
+        gameObject.tag = "Wall";
         yield return new WaitForSeconds(delay);
         speed = originalSpeed;
         animator.speed = 1;
         gameObject.tag = "NPC";
+        inStop = false;
         DestroyObject();
     }
 
     IEnumerator CheckPointStopMovement(float delay)
     {
+        inStop = true;
         gameObject.tag = "Wall";
         animator.speed = 0;
         float originalSpeed = speed;
@@ -230,16 +272,19 @@ public class NPCPathfinder : MonoBehaviour
         speed = originalSpeed;
         animator.speed = 1;
         gameObject.tag = "NPC";
+        inStop = false;
         DestroyObject();
     }
 
     IEnumerator PoliceStopMovement(float delay)
     {
+        inStop = true;
         gameObject.tag = "Wall";
         animator.speed = 0;
         float originalSpeed = speed;
         speed = 0;
         yield return new WaitForSeconds(delay);
+        inStop = false;
         DestroyObject();
         gameObject.SetActive(false);
     }
@@ -254,7 +299,7 @@ public class NPCPathfinder : MonoBehaviour
             //Debug.Log(hit.gameObject.name);
             if (hit.CompareTag("NPC") && hit.gameObject != gameObject)
             {
-                Debug.Log("Separation failed, still too close to another NPC.");
+                //Debug.Log("Separation failed, still too close to another NPC.");
                 return false; // Additional logic for failed separation could be implemented here
             }
         }
@@ -276,39 +321,7 @@ public class NPCPathfinder : MonoBehaviour
         Destroy(destoryObj);
     }
 
-    private void CheckWin()
-    {
-        if (isKid)
-        {
-            if (gameObject.transform.position.x < constantsList.winX)
-            {
-                Lose.SetActive(true);
-            }
-        }
-        else if (isVIP)
-        {
-            if (gameObject.transform.position.x < constantsList.winX)
-            {
-                Lose.SetActive(true);
-            }
-            if (gameObject.transform.position.x > constantsList.loseX)
-            {
-                Lose.SetActive(true);
-            }
-        }
-        else
-        {
-            if (gameObject.transform.position.x < constantsList.winX)
-            {
-                Win.SetActive(true);
-            }
-            if (gameObject.transform.position.x > constantsList.loseX)
-            {
-                Lose.SetActive(true);
-            }
-        }
-       
-    }
+   
 
     public void Stop()
     {
@@ -319,9 +332,12 @@ public class NPCPathfinder : MonoBehaviour
 
     public void Recover()
     {
-        animator.speed = 1;
-        speed = ori_speed;
-        DestroyObject();
+        if (inStop == false)
+        {
+            animator.speed = 1;
+            speed = ori_speed;
+        }
+        
     }
 
     public void Accelerate()

@@ -36,7 +36,7 @@ public class BGMManager : MonoBehaviour
 
     public void PlayMainMenuMusic()
     {
-        PlayMusic(inGameMusic);
+        PlayMusic(mainMenuMusic);
     }
 
     public void PlayInGameMusic()

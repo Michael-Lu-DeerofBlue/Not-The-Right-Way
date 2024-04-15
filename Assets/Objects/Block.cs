@@ -10,7 +10,7 @@ public class Block : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Hit block");
+        //Debug.Log("Hit block");
         if (other.gameObject.CompareTag("NPC")) // Make sure the collider is tagged as "NPC"
         {
             NPCPathfinder npc = other.GetComponent<NPCPathfinder>();

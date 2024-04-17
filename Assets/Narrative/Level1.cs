@@ -7,10 +7,6 @@ public class Level1 : MonoBehaviour
 {
     public GameObject constantsGameObject;
     private ConstantsList constantsList;
-    public GameObject[] FakeDisplay;
-    public GameObject[] ConstantDisplay;
-    public GameObject[] GameDisplay;
-    public GameObject Normal;
     public List<GameObject> backToOrigin = new List<GameObject>();
     public List<Vector3> originalPosition = new List<Vector3>();
     public Transform generated;
@@ -18,20 +14,36 @@ public class Level1 : MonoBehaviour
     public GameObject win;
     public bool inNotify;
     public bool inWin;
-    
+    public GameObject chp2;
+    public int level;
+    public int corret;
+
+    public bool inInitializing;
+
+    public GameObject FakeBG;
+    public GameObject RealBG;
+
+    public GameObject instruction;
+
+    public GameObject WallUI;
+    public GameObject CKPUI;
+    public GameObject BWUI;
+    public GameObject SSUI;
+    public GameObject HammerUI;
+
+    public Transform[] levelNPCs;
+
+    public Transform Chp2loc;
+
     // Start is called before the first frame update
+
     void Start()
     {
+        inInitializing = true;
         constantsList = constantsGameObject.GetComponent<ConstantsList>();
-        foreach (GameObject obj in ConstantDisplay)
+        foreach (Transform child in levelNPCs[level])
         {
-            if (obj != null)
-                obj.SetActive(true);
-        }
-        foreach (GameObject obj in ConstantDisplay)
-        {
-            if (obj != null)
-                obj.SetActive(true);
+            backToOrigin.Add(child.gameObject);
         }
         foreach (GameObject obj in backToOrigin)
         {
@@ -39,21 +51,25 @@ public class Level1 : MonoBehaviour
         }
     }
 
+    private void StartLevel()
+    {
+        FakeBG.SetActive(false);
+        instruction.SetActive(false);   
+        RealBG.SetActive(true);
+        levelNPCs[level].BroadcastMessage("StartLevel");
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown)
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            foreach (GameObject obj in FakeDisplay)
-            {
-                if (obj != null)
-                    obj.SetActive(false);
-            }
-            foreach (GameObject obj in GameDisplay)
-            {
-                if (obj != null)
-                    obj.SetActive(true);
-            }
+            Skip();
+        }
+        if (inInitializing && Input.anyKeyDown)
+        {
+            inInitializing = false;
+            StartLevel();
         }
         if (inNotify)
         {
@@ -80,22 +96,37 @@ public class Level1 : MonoBehaviour
             }
         }
 
-        if (Normal.transform.position.x < constantsList.winX)
+        
+    }
+
+    public void Lose()
+    {
+        inNotify = true;
+        Time.timeScale = 0;
+        notify.SetActive(true);
+    }
+
+    public void Add() {
+        corret++;
+        if (level == 0)
         {
-            inWin = true;
-            Time.timeScale = 0;
-            win.SetActive(true);
-        }
-        else if (Normal.transform.position.x > constantsList.loseX)
-        {
-            inNotify = true;
-            Time.timeScale = 0;
-            notify.SetActive(true);
+            if (corret == 4)
+            {
+                inWin = true;
+                Time.timeScale = 0;
+                win.SetActive(true);
+            }
         }
     }
 
-    void Clear()
+    public void Clear()
     {
+        constantsList.reset = true;
+        foreach (Transform child in levelNPCs[level])
+        {
+            child.gameObject.SetActive(true);
+        }
+        levelNPCs[level].BroadcastMessage("ResetLevel");
         notify.SetActive(false);
         win.SetActive(false);
         for (int i = 0; i < backToOrigin.Count; i++)
@@ -115,6 +146,8 @@ public class Level1 : MonoBehaviour
 
     void Skip()
     {
+        chp2.SetActive(true);
         gameObject.SetActive(false);
+        chp2.GetComponent<ToChp2>().Go(Chp2loc);
     }
 }

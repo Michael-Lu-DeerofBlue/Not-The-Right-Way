@@ -50,14 +50,14 @@ public class TrapPlacer : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3)) //bw
             {
-                if (trapYes[2])
+                if (trapYes[2] && LevelCounter.counter >= 2)
                 {
                     StartPlacement(BWStillPrefab, 3);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha4)) //ss
             {
-                if (trapYes[3])
+                if (trapYes[3] && LevelCounter.counter >= 3)
                 {
                     StartPlacement(SSPrefab, 4);
                 }
@@ -157,6 +157,7 @@ public class TrapPlacer : MonoBehaviour
                 break;
             case 2:
                 instance = Instantiate(WallPrefab, GetMouseWorldPosition(), Quaternion.identity);
+                instance.GetComponent<SingleSoundController>().PlaySound();
                 StartCoroutine(SwitchWallSpriteTemporarily());
                 break;
             case 3:
@@ -165,6 +166,7 @@ public class TrapPlacer : MonoBehaviour
                 break;
             case 4:
                 instance = Instantiate(SSPrefab, GetMouseWorldPosition(), Quaternion.identity);
+                instance.GetComponent<SingleSoundController>().PlaySound();
                 StartCoroutine(SwitchSSSpriteTemporarily());
                 break;
         }

@@ -18,6 +18,10 @@ public class AnimationControl : MonoBehaviour
     {
         if (animator != null)
         {
+            if (gameObject.tag == "Police")
+            {
+                gameObject.GetComponent<ExtraSoundController>().PlaySound();
+            }
             animator.speed = 1;  // Set the playback speed back to 1 to resume animations
         }
     }

@@ -21,7 +21,7 @@ public class Hammer : MonoBehaviour
     {
         if (!isSelected && gameObject.GetComponent<TrapPlacer>().isSelected == false && HYes)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha5)) //trap
+            if (Input.GetKeyDown(KeyCode.Alpha5) && LevelCounter.counter >= 4) //trap
             {
                 StartPlacement(hammerPrefab);
             }

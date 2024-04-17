@@ -11,12 +11,14 @@ public class ToChp2 : MonoBehaviour
     public float wait;
     public float dateDisplay;
     public float letterReading;
-    public GameObject date;
+    public GameObject Chp2;
     public GameObject message;
     public bool inReading;
+    public GameObject leveler;
 
-    private void Start()
+    public void Go(Transform n)
     {
+        nextchapter = n;
         StartCoroutine(PerformActions());
     }
     void Update()
@@ -48,6 +50,7 @@ public class ToChp2 : MonoBehaviour
 
         // Once the camera is in position, call FadeOut
         spriteFader.FadeOut();
+        Chp2.SetActive(true);
         message.SetActive(true);
 
         yield return new WaitForSeconds(letterReading);
@@ -64,7 +67,9 @@ public class ToChp2 : MonoBehaviour
             mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, play.position, cameraMoveSpeed * Time.deltaTime);
             yield return null;
         }
-
+        
+        leveler.SetActive(true);
+        leveler.GetComponent<Level1>().Clear();
         // Once the camera is in position, call FadeOut
         spriteFader.FadeOut();
         gameObject.SetActive(false);

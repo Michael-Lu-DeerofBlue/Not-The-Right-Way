@@ -11,11 +11,12 @@ public class BGMManager : MonoBehaviour
 
     private void Awake()
     {
+        PlayInGameMusic();
+        DontDestroyOnLoad(gameObject);
         // Singleton pattern
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);  // Persist if multiple scenes were to be used
         }
         else
         {

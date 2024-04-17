@@ -13,17 +13,38 @@ public class Detector : MonoBehaviour
     public float letterReading;
     public GameObject date;
     public GameObject officialDocument;
-
+    public GameObject level;
+    public GameObject audio;
+    public bool isReading;
+    public bool Started;
     void Update()
     {
-        if (Input.anyKeyDown)
+        
+        if (isReading)
         {
-            StartCoroutine(PerformActions());
+            if (Input.anyKeyDown)
+            {
+                StartCoroutine(GoGoGo());
+            }
         }
+        else
+        {
+            if (!Started){
+                if (Input.anyKeyDown)
+                {
+                    StartCoroutine(PerformActions());
+                }
+            }
+            
+        }
+
+
     }
 
     IEnumerator PerformActions()
     {
+        Started = true;
+        audio.GetComponent<BGMManager>().PlayInGameMusic();
         // Call the target sprite's FadeIn method
         spriteFader.FadeIn();
 
@@ -45,7 +66,11 @@ public class Detector : MonoBehaviour
         officialDocument.SetActive(true);
 
         yield return new WaitForSeconds(letterReading);
+        isReading = true;
+    }
 
+    IEnumerator GoGoGo()
+    {
         spriteFader.FadeIn();
         yield return new WaitForSeconds(wait);
         while (Vector3.Distance(mainCamera.transform.position, play1.position) > 0.01f)
@@ -53,9 +78,9 @@ public class Detector : MonoBehaviour
             mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, play1.position, cameraMoveSpeed * Time.deltaTime);
             yield return null;
         }
-
         // Once the camera is in position, call FadeOut
         spriteFader.FadeOut();
         gameObject.SetActive(false);
+        level.SetActive(true);
     }
 }

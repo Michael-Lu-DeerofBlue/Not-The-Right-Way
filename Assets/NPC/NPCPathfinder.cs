@@ -7,11 +7,11 @@ using Unity.Burst.CompilerServices;
 public class NPCPathfinder : MonoBehaviour
 {
     public GameObject constantsGameObject;
-    private float ori_speed;
+    public float ori_speed;
     public float speed;
     public float speedDeductor;
     private Vector2 movementDirection = Vector2.right;
-    private ConstantsList constantsList;
+    public ConstantsList constantsList;
     private bool isSlow = false;
     public bool isWall;
     private bool inSeperation;
@@ -27,16 +27,21 @@ public class NPCPathfinder : MonoBehaviour
     private Collider2D theWall;
     private Collider2D theBW;
     public float[] gapThreshold;
-    private Animator animator;
+    public Animator animator;
     private GameObject destoryObj;
     public bool inStop;
     private float checkpointDelay;
     private float policyDelay;
     private float hulkDelay;
-    void Start()
+    public GameObject leveler;
+    public bool Added;
+    public GameObject NormalExtraSound;
+    private void OnEnable()
     {
+        
         constantsList = constantsGameObject.GetComponent<ConstantsList>();
         animator = GetComponent<Animator>();
+        animator.speed = 1;
         ori_speed = speed;
         checkpointDelay = constantsList.checkpointDelay;
         policyDelay = constantsList.policyDelay;
@@ -75,7 +80,71 @@ public class NPCPathfinder : MonoBehaviour
             transform.rotation = Quaternion.Euler(eulerRotation);
         }
         MoveNPC();
-        //CheckWin();
+        CheckLose();
+        CheckWin();
+    }
+
+    public void ResetLevel() {
+        Added = false; 
+        isWall = isBW = metBrokenWall = inStop = isSlow = false;
+        speed = 2.3f;
+        ori_speed = speed;
+    }
+    private void CheckLose()
+    {
+        if (isKid)
+        {
+            if (gameObject.transform.position.x < constantsList.winX)
+            {
+                leveler.BroadcastMessage("Lose");
+            }
+        }
+        else if (isVIP)
+        {
+            if (gameObject.transform.position.x < constantsList.winX)
+            {
+                leveler.BroadcastMessage("Lose");
+            }
+            if (gameObject.transform.position.x > constantsList.loseX)
+            {
+                leveler.BroadcastMessage("Lose");
+            }
+        }
+        else
+        {
+            if (gameObject.transform.position.x > constantsList.loseX)
+            {
+                leveler.BroadcastMessage("Lose");
+            }
+        }
+
+    }
+
+    private void CheckWin()
+    {
+        if (!Added)
+        {
+            if (isKid)
+            {
+                if (gameObject.transform.position.x > constantsList.loseX)
+                {
+                    leveler.BroadcastMessage("Add");
+                    Added = true;
+                    gameObject.SetActive(false);
+                }
+            }
+            else if (!isVIP)
+            {
+                if (gameObject.transform.position.x < constantsList.winX)
+                {
+                    leveler.BroadcastMessage("Add");
+                    Added = true;
+                    gameObject.SetActive(false);
+                }
+            }
+        }
+        
+
     }
 
     void BrokenWallSituation()
@@ -103,7 +172,7 @@ public class NPCPathfinder : MonoBehaviour
 
     private void MoveNPC()
     {
-        float actualSpeed = speed + constantsList.mapSpeed;
+        float actualSpeed = speed + constantsGameObject.GetComponent<ConstantsList>().mapSpeed;
         if (isWall)
         {
             //Debug.Log(gameObject.name + movementDirection);
@@ -164,6 +233,7 @@ public class NPCPathfinder : MonoBehaviour
                 }
                 if (isHulk)
                 {
+                    gameObject.GetComponent<SingleSoundController>().PlaySound();
                     Destroy(collision.gameObject);
                     StartCoroutine(HulkStopMovement(hulkDelay));
                 }
@@ -173,6 +243,18 @@ public class NPCPathfinder : MonoBehaviour
                 }
                 break;
             case "BarberedWire":
+                if (isHulk)
+                {
+                    gameObject.GetComponent<ExtraSoundController>().PlaySound();
+                }
+                else if (isKid || isVIP)
+                {
+                    gameObject.GetComponent<SingleSoundController>().PlaySound();
+                }
+                else
+                {
+                    NormalExtraSound.GetComponent<SingleSoundController>().PlaySound();
+                }
                 theBW = collision.collider; 
                 isBW = true;
                 speed = speed * speedDeductor;
@@ -286,8 +368,22 @@ public class NPCPathfinder : MonoBehaviour
         yield return new WaitForSeconds(delay);
         inStop = false;
         DestroyObject();
-        gameObject.SetActive(false);
+        if (isVIP)
+        {
+            if (!Added)
+            {
+                gameObject.SetActive(false);
+                leveler.BroadcastMessage("Add");
+                Added = true;
+            }
+        }
+        else
+        {
+            leveler.BroadcastMessage("Lose");
+        }
+        
     }
+
 
 
     bool CheckSeparationSuccess()
@@ -344,6 +440,5 @@ public class NPCPathfinder : MonoBehaviour
     {
         speed = ori_speed;
         speed = accConstant * speed;
-        ori_speed = speed;
     }
 }

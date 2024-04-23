@@ -44,7 +44,6 @@ public class SequDisplay : MonoBehaviour
         {
             if (obj != null)
             {
-                Debug.Log("123");
                 obj.SetActive(true);  // Make the current object visible
                 yield return new WaitForSeconds(displayDuration);  // Wait for the specified duration
             }

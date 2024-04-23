@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Fungus;
+using Unity.VisualScripting;
 
 public class LevelController : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class LevelController : MonoBehaviour
     public GameObject BWUI;
     public GameObject SSUI;
     public GameObject HammerUI;
+
+    public GameObject constants;
+    public bool winWin;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +65,7 @@ public class LevelController : MonoBehaviour
     }
     void Update()
     {
+        Debugger();
         if (inInitializing && Input.anyKeyDown)
         {
             inInitializing = false;
@@ -91,8 +96,31 @@ public class LevelController : MonoBehaviour
                 Skip();
             }
         }
+       
 
+    }
 
+    public void Debugger()
+    {
+        if (AreAllChildrenInactive() && !winWin)
+        {
+            inWin = true;
+            Time.timeScale = 0;
+            win.SetActive(true);
+            winWin = true;
+        }
+    }
+
+    public bool AreAllChildrenInactive()
+    {
+        foreach (Transform NPC in NPCs[level - 1].transform)
+        {
+            if (NPC.gameObject.activeSelf)
+            {
+                return false; // If any child is active, return false
+            }
+        }
+        return true; // If all children are inactive, return true
     }
 
     public void Lose()
@@ -107,6 +135,7 @@ public class LevelController : MonoBehaviour
         correct++;
         if (correct == answers[level - 1])
         {
+            winWin = true;
             inWin = true;
             Time.timeScale = 0;
             win.SetActive(true);

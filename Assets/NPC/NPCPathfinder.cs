@@ -19,6 +19,7 @@ public class NPCPathfinder : MonoBehaviour
     public GameObject Win;
     public GameObject Lose;
     public bool isHulk;
+    public bool isNormal;
     public bool isKid;
     public bool metBrokenWall;
     public bool isVIP;
@@ -36,6 +37,7 @@ public class NPCPathfinder : MonoBehaviour
     public GameObject leveler;
     public bool Added;
     public GameObject NormalExtraSound;
+    public Sprite VIPSprite;
     private void OnEnable()
     {
         
@@ -233,9 +235,14 @@ public class NPCPathfinder : MonoBehaviour
                 }
                 if (isHulk)
                 {
-                    gameObject.GetComponent<SingleSoundController>().PlaySound();
-                    Destroy(collision.gameObject);
-                    StartCoroutine(HulkStopMovement(hulkDelay));
+                    if (collision.gameObject.name.Substring(0, 5) != "Normal" && collision.gameObject.name.Substring(0, 5) != "VIP" &&
+                        collision.gameObject.name.Substring(0, 5) != "Hulk" && collision.gameObject.name.Substring(0, 5) != "Kid")
+                    {
+                        gameObject.GetComponent<SingleSoundController>().PlaySound();
+                        Destroy(collision.gameObject);
+                        StartCoroutine(HulkStopMovement(hulkDelay));
+                    }
+                    
                 }
                 else
                 {

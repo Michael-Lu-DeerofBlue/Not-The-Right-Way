@@ -1569,6 +1569,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 1
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -1580,6 +1581,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 901216209}
+  VIPSprite: {fileID: 0}
 --- !u!114 &99908224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2100,6 +2102,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 1
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -2111,6 +2114,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 1386117700}
+  VIPSprite: {fileID: 0}
 --- !u!114 &115308635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2931,6 +2935,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 1
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -2942,6 +2947,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &137475816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3927,11 +3933,11 @@ MonoBehaviour:
   isSelected: 0
   trapYes: 0101010101
   trapCooldown:
-  - 0.5
-  - 0.5
-  - 0.5
+  - 1
+  - 1.5
   - 2
   - 0.5
+  - 0.1
   wallUI: {fileID: 688738260}
   wallYes: {fileID: 21300000, guid: a18d6ecc5d4343c4a885541b1ead6fd9, type: 3}
   wallNo: {fileID: 21300000, guid: e629a8f1191a6d143afafc313694223a, type: 3}
@@ -4213,6 +4219,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 1
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -4224,6 +4231,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 1517293733}
+  VIPSprite: {fileID: 0}
 --- !u!114 &238769633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7018,6 +7026,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 0
   isKid: 1
   metBrokenWall: 0
   isVIP: 0
@@ -7029,6 +7038,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &514243164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9069,6 +9079,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 1
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -9080,6 +9091,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 522074318}
+  VIPSprite: {fileID: 0}
 --- !u!114 &618173251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9879,6 +9891,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 1
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -9890,6 +9903,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &655774514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12048,6 +12062,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 1
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -12059,6 +12074,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 1623717587}
+  VIPSprite: {fileID: 0}
 --- !u!114 &792847419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14412,6 +14428,8 @@ MonoBehaviour:
   BWUI: {fileID: 583212002}
   SSUI: {fileID: 1548312103}
   HammerUI: {fileID: 1862904077}
+  constants: {fileID: 877378072}
+  winWin: 0
 --- !u!1 &1026917406
 GameObject:
   m_ObjectHideFlags: 0
@@ -15212,6 +15230,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 1
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -15223,6 +15242,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 601698532}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1065681360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15566,6 +15586,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 1
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -15577,6 +15598,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1066904382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18299,6 +18321,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 1
@@ -18310,6 +18333,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1255669888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20727,6 +20751,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 1
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -20738,6 +20763,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1436850050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21436,6 +21462,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 1
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -21447,6 +21474,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1447645631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23312,6 +23340,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 1
@@ -23323,6 +23352,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1547038640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26366,6 +26396,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 1
+  isNormal: 0
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -26377,6 +26408,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1866927872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27846,6 +27878,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 0
   isKid: 1
   metBrokenWall: 0
   isVIP: 0
@@ -27857,6 +27890,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 0}
+  VIPSprite: {fileID: 0}
 --- !u!114 &1943515978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29695,6 +29729,7 @@ MonoBehaviour:
   Win: {fileID: 0}
   Lose: {fileID: 0}
   isHulk: 0
+  isNormal: 1
   isKid: 0
   metBrokenWall: 0
   isVIP: 0
@@ -29706,6 +29741,7 @@ MonoBehaviour:
   leveler: {fileID: 982431997}
   Added: 0
   NormalExtraSound: {fileID: 539014014}
+  VIPSprite: {fileID: 0}
 --- !u!114 &2009542979
 MonoBehaviour:
   m_ObjectHideFlags: 0

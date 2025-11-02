@@ -17,7 +17,7 @@ public class Detect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!hit && Input.anyKeyDown)
+        if (!hit && Input.anyKeyDown && !Input.GetMouseButtonDown(0))
         {
             hit = true;
             flowchart.ExecuteBlock("ToChp1");

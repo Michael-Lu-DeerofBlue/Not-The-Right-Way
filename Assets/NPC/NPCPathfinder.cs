@@ -357,6 +357,10 @@ public class NPCPathfinder : MonoBehaviour
         animator.speed = 0;
         float originalSpeed = speed;
         speed = 0;
+        if (isVIP)
+        {
+            gameObject.GetComponent<NormaltoVIP>().Change();
+        }
         yield return new WaitForSeconds(delay);
         speed = originalSpeed;
         animator.speed = 1;

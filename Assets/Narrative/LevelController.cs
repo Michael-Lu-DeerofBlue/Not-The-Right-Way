@@ -8,9 +8,12 @@ using Unity.VisualScripting;
 public class LevelController : MonoBehaviour
 {
     public GameObject[] instructions;
+    public GameObject[] instructionsCHN;
     public GameObject[] NPCs;
     public GameObject win;
+    public GameObject winCHN;
     public GameObject notify;
+    public GameObject notifyCHN;
     public int level;
     public bool inInitializing;
     public bool inNotify;
@@ -32,7 +35,16 @@ public class LevelController : MonoBehaviour
         inInitializing = true;
         level = LevelCounter.counter;
         Time.timeScale = 0;
-        instructions[level - 1].SetActive(true);
+        if (LocalizationManager.language == 0)
+        {
+            instructions[level - 1].SetActive(true);
+        }
+        else
+        {
+            instructionsCHN[level - 1].SetActive(true);
+            win = winCHN;
+            notify = notifyCHN;
+        }
         NPCs[level - 1].SetActive(true);
 
         if (level == 2)
@@ -59,8 +71,14 @@ public class LevelController : MonoBehaviour
     }
     private void StartLevel()
     {
-        Time.timeScale = 1;
-        instructions[level-1].SetActive(false);
+        Time.timeScale = 1; if (LocalizationManager.language == 0)
+        {
+            instructions[level - 1].SetActive(false);
+        }
+        else
+        {
+            instructionsCHN[level - 1].SetActive(false);
+        }
         NPCs[level-1].BroadcastMessage("StartLevel");
     }
     void Update()
